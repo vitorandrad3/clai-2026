@@ -1,0 +1,33 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# --- Virtualenv ---
+.venv/
+venv/
+
+# --- Reflex ---
+.web/
+.reflex/
+*.db
+
+# --- Configuração / segredos (NUNCA versionar) ---
+.env
+.env.local
+*.json.key
+service-account*.json
+credentials*.json
+
+# --- Logs / temporários desta máquina ---
+*.log
+reflex_install.log
+deps_install.log
+
+# --- Editores / SO ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
