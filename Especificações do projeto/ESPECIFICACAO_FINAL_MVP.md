@@ -17,7 +17,7 @@ Este documento consolida as decisões tomadas e substitui o rascunho `ESPECIFICA
 | **M3** | RAG / busca | **Vertex AI Vector Search**, com estratégia de **on/off** para controle de custo. |
 | **M4** | Notícias | Ingestão **somente via feed RSS** (sem scraping, sem upload manual). |
 | **M5–M8** | — | **Fora do MVP.** Sem async obrigatório, sem structured-output formal, sem trilha de IA, sem hardening corporativo. |
-| **Guardrails** | Custo | Script on/off do índice, **budget alert**, modelos `flash`, atenção a quotas de free tier. |
+| **Guardrails** | Custo | Script on/off do índice, **budget alert**, modelos `flash`/`flash-lite` (sem `pro`), atenção a quotas de free tier. |
 
 ---
 
@@ -120,13 +120,15 @@ planos_de_acao/<ponto_id>/...
 
 | # | Serviço | Entrada | Saída | Técnica | Modelo sugerido |
 |---|---------|---------|-------|---------|-----------------|
-| 1 | Correlação risco × notícia/incidente | riscos + notícias(RSS)/incidentes | lista correlações | contexto + JSON | `gemini-3.5-flash` |
-| 2 | Matriz de risco | docs de abertura | matriz | contexto + JSON | `gemini-3.5-flash` |
-| 3 | Chat por TA (RAG) | anexos do TA + pergunta | resposta com citações | File API | `gemini-3.5-flash` |
-| 4 | Relatório de fechamento | todos os TAs do trabalho | relatório (md) | contexto longo | `gemini-3.1-pro-preview` |
-| 5 | Análise do desenho do plano | ponto + plano | eficiência + lacunas | contexto + JSON | `gemini-3.5-flash` |
-| 6 | Análise da implementação | plano + evidências | efetividade + pendências | contexto + JSON | `gemini-3.5-flash` |
+| 1 | Correlação risco × notícia/incidente | riscos + notícias(RSS)/incidentes | lista correlações | contexto + JSON | `gemini-2.5-flash-lite` |
+| 2 | Matriz de risco | docs de abertura | matriz | contexto + JSON | `gemini-2.5-flash` |
+| 3 | Chat por TA (RAG) | anexos do TA + pergunta | resposta com citações | File API | `gemini-2.5-flash` |
+| 4 | Relatório de fechamento | todos os TAs do trabalho | relatório (md) | contexto longo | `gemini-2.5-flash` |
+| 5 | Análise do desenho do plano | ponto + plano | eficiência + lacunas | contexto + JSON | `gemini-2.5-flash` |
+| 6 | Análise da implementação | plano + evidências | efetividade + pendências | contexto + JSON | `gemini-2.5-flash` |
 | 7 | Busca de acervo (Vector Search) | corpus de docs | top-k trechos | Vertex Vector Search | embeddings |
+
+**Estratégia de modelos (free tier):** `gemini-2.5-flash` é o cavalo de batalha (análises, chat, relatório); `gemini-2.5-flash-lite` fica nas tarefas leves/alto volume (ex.: correlação em massa). **Sem modelo `pro`** no MVP para conter custo.
 
 *(Confirmar disponibilidade dos modelos no projeto/região antes do uso.)*
 
@@ -322,7 +324,7 @@ clai/
 | Endpoint Vertex ligado 24/7 | Script `stop` + rotina de desligar ao fim da sessão |
 | Estouro geral de custo | **Budget alert** no Cloud Billing (limite baixo, ex. R$/US$ poucos) + e-mail |
 | Quota de queries BigQuery | Evitar `SELECT *`; particionar/clusterizar; ficar < 1TB/mês |
-| Custo de tokens Gemini | Usar `flash` por padrão; `pro` só no relatório; cache simples por hash |
+| Custo de tokens Gemini | `flash-lite` em tarefas leves/alto volume e `flash` no restante (sem `pro`); cache simples por hash |
 | Storage | Cloud Storage free 5GB; Firestore free 1GB/50k leituras dia |
 | Vazamento de credenciais | `.env` no `.gitignore`; chave da Service Account fora do repo |
 

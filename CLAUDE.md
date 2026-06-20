@@ -8,7 +8,7 @@ Plataforma de auditoria interna assistida por IA. **Python full-stack com Reflex
 
 ## Stack
 - **App:** Reflex `0.9.5` (frontend + backend em Python; sem FastAPI separado).
-- **IA:** Gemini via `google-genai` (modelos `gemini-3.5-flash` / `gemini-3.1-pro-preview`).
+- **IA:** Gemini via `google-genai` (modelos `gemini-2.5-flash` / `gemini-2.5-flash-lite`; sem `pro`).
 - **Dados operacionais:** Firestore. **Acervo analítico:** BigQuery. **Arquivos:** Cloud Storage.
 - **Busca de acervo:** Vertex AI Vector Search (endpoint com on/off — desligar quando ocioso).
 - **RAG do chat por TA:** Gemini File API (sem vector store).
@@ -33,7 +33,7 @@ Plataforma de auditoria interna assistida por IA. **Python full-stack com Reflex
 
 ## Guardrails de custo (free tier)
 - **Endpoint Vertex Vector Search desligado quando não estiver em uso** (`scripts/vector_search.py stop`).
-- Modelos `flash` por padrão; `pro` só no relatório de fechamento.
+- `gemini-2.5-flash` como padrão; `gemini-2.5-flash-lite` em tarefas leves/alto volume; sem `pro`.
 - BigQuery: sem `SELECT *`; ficar < 1TB de consulta/mês.
 - Manter **budget alert** ativo no Cloud Billing.
 - `.env` e chaves de Service Account **nunca** no Git.

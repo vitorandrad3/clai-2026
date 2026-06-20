@@ -128,7 +128,7 @@ Como o projeto roda na **conta pessoal do dono** (não corporativo), o modelo é
   - **(a) API do Gemini** (`google-genai` + `GEMINI_API_KEY`) — chave única do dono, mais simples; **ou**
   - **(b) Vertex AI** (mesmo SDK, auth por ADC) — sem API key, usa o login GCP de cada um.
 
-> ⚠️ **Free tier compartilhado:** com várias pessoas no mesmo projeto, **a quota gratuita é somada entre todos**. Reforça os guardrails da seção 9 do `ESPECIFICACAO_FINAL_MVP.md` (budget alert, endpoint Vertex desligado quando ocioso, modelos `flash`).
+> ⚠️ **Free tier compartilhado:** com várias pessoas no mesmo projeto, **a quota gratuita é somada entre todos**. Reforça os guardrails da seção 9 do `ESPECIFICACAO_FINAL_MVP.md` (budget alert, endpoint Vertex desligado quando ocioso, modelos `flash`/`flash-lite`).
 
 ---
 
