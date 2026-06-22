@@ -1,8 +1,10 @@
-# CLAI 2026 — dependências (versões FIXAS para ambiente reprodutível).
+# CLAI 2026 — dependências do BACKEND (versões FIXAS para ambiente reprodutível).
 # Ao adicionar dep: fixe a versão e commite no mesmo PR. Avise o time p/ reinstalar.
 
-# --- App full-stack ---
-reflex==0.9.5.post2
+# --- API ---
+fastapi==0.138.0
+uvicorn[standard]==0.49.0
+python-multipart==0.0.32
 
 # --- GCP ---
 google-cloud-bigquery==3.42.0

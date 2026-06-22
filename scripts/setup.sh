@@ -6,31 +6,31 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
-PY="$ROOT/.venv/bin/python"
+PY="$ROOT/backend/.venv/bin/python"
 
-echo "==> [1/5] Verificando Python 3.11..."
-if ! python3.11 --version >/dev/null 2>&1; then
-  echo "AVISO: python3.11 nao encontrado. Instale Python 3.11.x." >&2
-fi
+echo "==> [1/6] Verificando Python 3.11 e Node..."
+python3.11 --version >/dev/null 2>&1 || echo "AVISO: python3.11 nao encontrado." >&2
+node --version >/dev/null 2>&1 || echo "AVISO: Node.js (LTS) nao encontrado — necessario para o frontend." >&2
 
-echo "==> [2/5] Criando virtualenv (.venv)..."
-[ -d .venv ] || python3.11 -m venv .venv
+echo "==> [2/6] Backend: virtualenv (backend/.venv)..."
+[ -d backend/.venv ] || python3.11 -m venv backend/.venv
 
-echo "==> [3/5] Instalando dependencias..."
+echo "==> [3/6] Backend: instalando dependencias..."
 "$PY" -m pip install --upgrade pip --quiet
-"$PY" -m pip install -r requirements.txt
+"$PY" -m pip install -r backend/requirements.txt
 
-echo "==> [4/5] Verificando .env..."
-if [ ! -f .env ]; then
-  cp .env.example .env
-  echo "AVISO: .env criado a partir do template. Preencha GCP_PROJECT_ID e DEV_NAMESPACE."
+echo "==> [4/6] Frontend: instalando dependencias (npm)..."
+if [ -f frontend/package.json ]; then
+  (cd frontend && npm install)
 else
-  echo "    .env ja existe (ok)."
+  echo "AVISO: frontend/package.json ainda nao existe — pule ate o frontend ser criado." >&2
 fi
 
-echo "==> [5/5] Inicializando Reflex (idempotente)..."
-"$PY" -m reflex init
+echo "==> [5/6] Verificando .env..."
+[ -f .env ] || { cp .env.example .env; echo "AVISO: .env criado. Preencha GCP_PROJECT_ID e DEV_NAMESPACE."; }
+if [ -f frontend/.env.example ] && [ ! -f frontend/.env ]; then cp frontend/.env.example frontend/.env; echo "    frontend/.env criado."; fi
 
+echo "==> [6/6] Setup concluido."
 echo ""
-echo "Ambiente pronto. Para subir a app:"
-echo "    ./.venv/bin/python -m reflex run"
+echo "Subir o backend:  cd backend && ./.venv/bin/python -m uvicorn app.main:app --reload"
+echo "Subir o frontend: cd frontend && npm run dev"
